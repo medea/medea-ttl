@@ -5,14 +5,17 @@ module.exports = function(db) {
   return db;
 };
 
-var MedeaTtl = function(db) {
+var MedeaTtl = function(db, options) {
   if (!(this instanceof MedeaTtl)) {
     return new MedeaTtl(db);
   }
 
+  options = options || {};
+
   this.db = db;
-  this.frequency = 5000;
-  this.prefix = 'ttl-';
+  this.frequency = options.frequency || 1000;
+  this.prefix = options.prefix || 'ttl-';
+
   this.interval = null;
 
   this._wrap();

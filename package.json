@@ -1,0 +1,20 @@
+{
+  "name": "medea-ttl",
+  "version": "0.0.0",
+  "description": "A TTL component for Medea.",
+  "main": "medea_ttl.js",
+  "dependencies": {
+    "buffer-equal": "~0.0.1",
+    "medea": "~0.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "medea",
+    "tll"
+  ],
+  "author": "Kevin Swiber <kswiber@gmail.com>",
+  "license": "MIT"
+}
