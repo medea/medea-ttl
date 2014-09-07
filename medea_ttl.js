@@ -13,7 +13,7 @@ var MedeaTtl = function(db, options) {
   options = options || {};
 
   this.db = db;
-  this.frequency = options.frequency || 1000;
+  this.frequency = options.frequency || 5 * 60 * 1000;
   this.prefix = options.prefix || 'ttl-';
 
   this.interval = null;
@@ -69,6 +69,7 @@ MedeaTtl.prototype.stopInterval = function() {
 
 MedeaTtl.prototype._wrap = function() {
   this._wrapOpen();
+  this._wrapGet();
   this._wrapPut();
   this._wrapRemove();
 };
@@ -95,19 +96,70 @@ MedeaTtl.prototype._wrapOpen = function() {
   };
 };
 
+MedeaTtl.prototype._wrapGet = function() {
+  var _get = this.db.get.bind(this.db);
+  
+  var self = this;
+  this.db.get = function(key, snapshot, callback) {
+    if (!callback) {
+      callback = snapshot;
+      snapshot = undefined;
+    }
+
+    if (snapshot) {
+      _get(key, snapshot, callback);
+      return;
+    }
+
+    var prefixed = self.prefix + key;
+    if (self.db.keydir[prefixed]) {
+      _get(prefixed, function(err, val) {
+        if (err) {
+          callback(err);
+          return;
+        }
+
+        if (val) {
+          if (Date.now() >= parseInt(val.toString())) {
+            self.db.remove(prefixed, function(err) {
+              if (err) {
+                callback(err);
+                return;
+              }
+              self.db.remove(key, function(err) {
+                if (err) {
+                  callback(err);
+                }
+                callback();
+              });
+            });
+          } else {
+            _get(key, snapshot, callback);
+          }
+        } else {
+          _get(key, snapshot, callback);
+        }
+      });
+    } else {
+      _get(key, snapshot, callback);
+    }
+
+  };
+};
+
 MedeaTtl.prototype._wrapPut = function() {
   var _put = this.db.put.bind(this.db);
 
   var self = this;
   this.db.put = function(key, value, ttl, callback) {
-    if (bufferEqual(value, new Buffer('medea_tombstone'))) {
-      _put(key, value, callback);
-      return;
-    }
-
     if (typeof ttl === 'function') {
       callback = ttl;
       ttl = null;
+    }
+
+    if (bufferEqual(value, new Buffer('medea_tombstone'))) {
+      _put(key, value, callback);
+      return;
     }
 
     var prefixed = self.prefix + key;
