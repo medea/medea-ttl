@@ -15,3 +15,9 @@ db.open('./.data', function(err) {
     }, 500);
   });
 });
+
+['SIGINT', 'SIGTERM'].forEach(function(signal) {
+  process.on(signal, function() {
+    db.close(process.exit);
+  });
+});

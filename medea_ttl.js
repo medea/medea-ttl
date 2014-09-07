@@ -1,7 +1,7 @@
 var bufferEqual = require('buffer-equal');
 
-module.exports = function(db) {
-  new MedeaTtl(db);
+module.exports = function(db, options) {
+  new MedeaTtl(db, options);
   return db;
 };
 
