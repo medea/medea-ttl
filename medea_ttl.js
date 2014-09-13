@@ -69,6 +69,7 @@ MedeaTtl.prototype.stopInterval = function() {
 
 MedeaTtl.prototype._wrap = function() {
   this._wrapOpen();
+  this._wrapClose();
   this._wrapGet();
   this._wrapPut();
   this._wrapRemove();
@@ -81,18 +82,48 @@ MedeaTtl.prototype._wrapOpen = function() {
   this.db.open = function() {
     var args = Array.prototype.slice.call(arguments);
 
+    var cb;
     if (args.length && (typeof args[args.length - 1] === 'function')) {
-      var cb = args.pop();
-      args.push(function(err) {
-        if (!err) {
-          self.startInterval();
-        }
-
-        cb(err);
-      });
+      cb = args.pop();
     }
 
+    args.push(function(err) {
+      if (!err) {
+        self.startInterval();
+      }
+
+      if (cb) {
+        cb(err);
+      }
+    });
+
     _open.apply(self.db, args);
+  };
+};
+
+MedeaTtl.prototype._wrapClose = function() {
+  var _close = this.db.close.bind(this.db);
+
+  var self = this;
+  this.db.close = function() {
+    var args = Array.prototype.slice.call(arguments);
+
+    var cb;
+    if (args.length && (typeof args[args.length - 1] === 'function')) {
+      cb = args.pop();
+    }
+
+    args.push(function(err) {
+      if (!err) {
+        self.stopInterval();
+      }
+
+      if (cb) {
+        cb(err);
+      }
+    });
+
+    _close.apply(self.db, args);
   };
 };
 
