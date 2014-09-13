@@ -1,14 +1,13 @@
 {
   "name": "medea-ttl",
-  "version": "0.0.0",
-  "description": "A TTL component for Medea.",
+  "version": "0.1.0",
+  "description": "Set a time-to-live (TTL) for key-value pairs in medea.",
   "main": "medea_ttl.js",
   "dependencies": {
     "buffer-equal": "~0.0.1",
     "medea": "^0.12.0"
   },
   "devDependencies": {
-    "medea": "~0.11.0",
     "mocha": "^1.21.4"
   },
   "scripts": {
@@ -16,7 +15,7 @@
   },
   "keywords": [
     "medea",
-    "tll"
+    "ttl"
   ],
   "author": "Kevin Swiber <kswiber@gmail.com>",
   "license": "MIT"
