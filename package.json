@@ -1,6 +1,6 @@
 {
   "name": "medea-ttl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Set a time-to-live (TTL) for key-value pairs in medea.",
   "main": "medea_ttl.js",
   "dependencies": {
@@ -12,6 +12,10 @@
   },
   "scripts": {
     "test": "mocha -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/medea/medea-ttl.git"
   },
   "keywords": [
     "medea",
