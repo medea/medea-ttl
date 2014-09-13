@@ -8,10 +8,11 @@
     "medea": "^0.12.0"
   },
   "devDependencies": {
-    "medea": "~0.11.0"
+    "medea": "~0.11.0",
+    "mocha": "^1.21.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -R spec"
   },
   "keywords": [
     "medea",

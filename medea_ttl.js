@@ -1,7 +1,10 @@
 var bufferEqual = require('buffer-equal');
 
 module.exports = function(db, options) {
-  new MedeaTtl(db, options);
+  if (!db._ttl) {
+    new MedeaTtl(db, options);
+  }
+
   return db;
 };
 
@@ -13,6 +16,7 @@ var MedeaTtl = function(db, options) {
   options = options || {};
 
   this.db = db;
+  this.db._ttl = this;
   this.frequency = options.frequency || 5 * 60 * 1000;
   this.prefix = options.prefix || 'ttl-';
 
