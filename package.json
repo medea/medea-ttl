@@ -4,7 +4,8 @@
   "description": "A TTL component for Medea.",
   "main": "medea_ttl.js",
   "dependencies": {
-    "buffer-equal": "~0.0.1"
+    "buffer-equal": "~0.0.1",
+    "medea": "^0.12.0"
   },
   "devDependencies": {
     "medea": "~0.11.0"
